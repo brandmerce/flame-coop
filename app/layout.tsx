@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, Jost } from 'next/font/google';
-import Nav from '@/components/Nav';
-import Footer from '@/components/Footer';
-import ScrollReveal from '@/components/ScrollReveal';
+import SiteChrome from '@/components/SiteChrome';
 import '@/styles/globals.css';
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -97,10 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <Nav />
-        <main style={{ paddingTop: '72px' }}>{children}</main>
-        <Footer />
-        <ScrollReveal />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
