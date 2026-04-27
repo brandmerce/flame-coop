@@ -8,8 +8,8 @@ const singletonTypes = ['siteSettings', 'navigation', 'homepage', 'about', 'beli
 export default defineConfig({
   name:    'flame-coop',
   title:   'The Flame CMS',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? '3kgekbj6',
+  dataset:   process.env.NEXT_PUBLIC_SANITY_DATASET ?? 'production',
 
   plugins: [
     structureTool({
