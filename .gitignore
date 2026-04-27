@@ -19,3 +19,7 @@ out/
 
 # Debug logs
 npm-debug.log*
+
+# Sanity Studio build output
+dist/
+.sanity/
