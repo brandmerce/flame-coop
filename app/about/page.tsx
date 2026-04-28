@@ -143,7 +143,7 @@ export default async function AboutPage() {
             <h2>A Heart for Families, Faith, and the Next Generation.</h2>
           </div>
           <div className="director-cards reveal">
-            {directors.map((d, i) => (
+            {directors.map((d: { name: string; titleText: string; headshot: unknown; headshotAlt: string; bio?: string; bio2?: string }, i: number) => (
               <div key={i} className="director-card">
                 <div className="director-card__photo">
                   {d.headshot ? (

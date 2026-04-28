@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import ImagePlaceholder from '@/components/ImagePlaceholder';
 
 interface AdmissionsFormProps {
   enrollmentOpen:         boolean;
