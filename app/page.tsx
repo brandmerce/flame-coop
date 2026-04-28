@@ -59,26 +59,28 @@ export default async function HomePage() {
       {/* WHO WE ARE */}
       <section style={{ padding: 'var(--section-v) 0' }}>
         <div className="container">
-          <div className="split split--40">
-            <div className="split__media reveal">
+          <div className="reveal" style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 48px' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>Who We Are</span>
+            <h2 style={{ marginBottom: '20px' }}>
+              More Than a Co-op. A Place Where Children Grow in Faith and Confidence.
+            </h2>
+            <p className="lead">
+              For families who want the support of a classroom, the warmth of community, and a Christ-centered place where their children can learn, build friendships, and be poured into.
+            </p>
+          </div>
+          <div className="split split--40 reveal">
+            <div className="split__media">
               <ImagePlaceholder label="Photo: Small group classroom moment" aspectRatio="tall" />
             </div>
-            <div className="split__body reveal reveal-delay-1">
-              <span className="eyebrow">Who We Are</span>
-              <h2 style={{ marginBottom: '20px' }}>
-                More Than a Co-op. A Place Where Children Grow in Faith and Confidence.
-              </h2>
-              <p className="lead" style={{ marginBottom: '20px' }}>
-                For families who want the support of a classroom, the warmth of community, and a Christ-centered place where their children can learn, build friendships, and be poured into.
-              </p>
-              <h3 style={{ marginBottom: '12px', fontSize: '1.2rem' }}>
+            <div className="split__body">
+              <h3 style={{ marginBottom: '16px', fontSize: '1.35rem' }}>
                 Small Groups. Real Support. Christ at the Center.
               </h3>
               <p>
                 The Flame gives homeschool families a place where children are taught, encouraged, and discipled in a smaller, more personal setting. With caring tutors, meaningful classes, and a community of families walking in the same direction, students grow academically, spiritually, and socially — without losing the heart and flexibility of homeschooling.
               </p>
-              <div style={{ marginTop: '24px' }}>
-                <Link href="/about" className="link-arrow">Learn More About The Flame</Link>
+              <div style={{ marginTop: '28px' }}>
+                <Link href="/about" className="btn btn--primary">Learn More About Us</Link>
               </div>
             </div>
           </div>
