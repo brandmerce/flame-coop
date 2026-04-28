@@ -12,7 +12,8 @@ export const homepage = defineType({
     { name: 'why',       title: 'Why Choose Us — Section 3' },
     { name: 'programs',  title: 'Programs Preview — Section 4' },
     { name: 'feels',     title: 'What The Flame Feels Like — Section 5' },
-    { name: 'cta',       title: 'Final CTA — Section 6' },
+    { name: 'community', title: 'Community Statement — Section 6' },
+    { name: 'cta',       title: 'Final CTA — Section 7' },
   ],
   fields: [
 
@@ -55,6 +56,8 @@ export const homepage = defineType({
       description: 'e.g. — 2 Timothy 1:6–7' }),
 
     // ── WHY CHOOSE US ─────────────────────────────────────────────────────────
+    defineField({ name: 'whyChooseEyebrow', title: 'Eyebrow Label', type: 'string', group: 'why',
+      description: 'Small uppercase label above the heading. Defaults to "Why Choose Us".' }),
     defineField({ name: 'whyChooseHeading', title: 'Section Heading', type: 'string', group: 'why' }),
     defineField({ name: 'whyChooseSubhead', title: 'Section Subheading', type: 'text', rows: 3, group: 'why' }),
     defineField({
@@ -78,6 +81,8 @@ export const homepage = defineType({
     defineField({ name: 'programsSubhead', title: 'Section Sub-headline', type: 'text', rows: 3, group: 'programs' }),
 
     // ── WHAT THE FLAME FEELS LIKE ─────────────────────────────────────────────
+    defineField({ name: 'feelsLikeEyebrow',   title: 'Eyebrow Label',   type: 'string', group: 'feels',
+      description: 'Small uppercase label above the heading. Defaults to "What The Flame Feels Like".' }),
     defineField({ name: 'feelsLikeHeading',   title: 'Section Heading', type: 'string', group: 'feels' }),
     defineField({ name: 'feelsLikeLead',      title: 'Lead Paragraph',  type: 'text', rows: 3, group: 'feels' }),
     defineField({ name: 'feelsLikeBody',      title: 'Body Copy',       type: 'text', rows: 5, group: 'feels' }),
@@ -88,6 +93,15 @@ export const homepage = defineType({
       description: 'Each line appears as a bullet point below the body copy.',
       of: [{ type: 'string' }],
     }),
+
+    // ── COMMUNITY STATEMENT ───────────────────────────────────────────────────
+    defineField({ name: 'communityEyebrow', title: 'Eyebrow Label', type: 'string', group: 'community',
+      description: 'Small uppercase label above the heading. Defaults to "Join the Community".' }),
+    defineField({ name: 'communityHeading', title: 'Section Heading', type: 'string', group: 'community' }),
+    defineField({ name: 'communityLead',    title: 'Lead Paragraph',  type: 'text', rows: 3, group: 'community',
+      description: 'The larger intro sentence shown below the heading.' }),
+    defineField({ name: 'communityBody',    title: 'Body Copy',       type: 'text', rows: 4, group: 'community',
+      description: 'Secondary paragraph shown in a lighter color below the lead.' }),
 
     // ── FINAL CTA ─────────────────────────────────────────────────────────────
     defineField({ name: 'ctaHeading',    title: 'Section Heading',    type: 'string', group: 'cta' }),

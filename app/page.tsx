@@ -80,6 +80,7 @@ export default async function HomePage() {
   const whoButtonUrl  = cms?.whoWeAreButtonUrl  ?? '/about';
 
   // ── Why Choose Us ─────────────────────────────────────────────────────────
+  const whyEyebrow  = cms?.whyChooseEyebrow ?? 'Why Choose Us';
   const whyHeading  = cms?.whyChooseHeading ?? 'A Place Where Faith, Learning, and Community Grow Together.';
   const whySubhead  = cms?.whyChooseSubhead ?? "For many families, homeschooling is a calling. But that doesn't mean you have to carry it alone. The Flame gives families a Christ-centered community and a clear path for growth.";
   const whyCards    = cms?.whyChooseCards?.length ? cms.whyChooseCards : defaultWhyCards;
@@ -90,11 +91,18 @@ export default async function HomePage() {
   const programsSubhead = cms?.programsSubhead ?? 'From the first spark in kindergarten to high school discipleship — one connected journey, built to go as deep as your child is ready.';
 
   // ── What The Flame Feels Like ─────────────────────────────────────────────
+  const feelsEyebrow   = cms?.feelsLikeEyebrow ?? 'What The Flame Feels Like';
   const feelsHeading   = cms?.feelsLikeHeading ?? 'Known by Name. Rooted in Truth. Sent With Purpose.';
   const feelsLead      = cms?.feelsLikeLead    ?? "A child's education should shape more than what they know. It should shape who they are becoming.";
   const feelsBody      = cms?.feelsLikeBody    ?? 'At The Flame, students are surrounded by adults and families who care about their hearts, their minds, their character, and their walk with the Lord. We want children who can read well, think clearly, write confidently, pray with courage, and stand firm in a world that will challenge what they believe.';
   const feelsImageSrc  = cms?.feelsLikeImage ? urlFor(cms.feelsLikeImage).width(800).url() : undefined;
   const feelsProofRows = cms?.feelsLikeProofRows?.length ? cms.feelsLikeProofRows : defaultProofRows;
+
+  // ── Community Statement ───────────────────────────────────────────────────
+  const communityEyebrow = cms?.communityEyebrow ?? 'Join the Community';
+  const communityHeading = cms?.communityHeading ?? 'This Is Why The Flame Exists.';
+  const communityLead    = cms?.communityLead    ?? 'To help fan into flame the gifts God has already placed inside your child.';
+  const communityBody    = cms?.communityBody    ?? "We exist because a group of families believed children deserved more than a good education. They deserved a community that would call out the fire inside them. That's still what we're building — one family at a time.";
 
   // ── CTA ───────────────────────────────────────────────────────────────────
   const ctaHeading    = cms?.ctaHeading         ?? "We'd Love to Meet Your Family.";
@@ -154,7 +162,7 @@ export default async function HomePage() {
       <section className="section--dark">
         <div className="container">
           <div style={{ maxWidth: '520px', marginBottom: '48px' }} className="reveal">
-            <span className="eyebrow">Why Choose Us</span>
+            <span className="eyebrow">{whyEyebrow}</span>
             <h2 style={{ marginBottom: '16px' }}>{whyHeading}</h2>
             <p style={{ color: 'rgba(255,255,255,.6)', fontSize: '1rem' }}>{whySubhead}</p>
           </div>
@@ -201,7 +209,7 @@ export default async function HomePage() {
         <div className="container">
           <div className="split">
             <div className="split__body reveal">
-              <span className="eyebrow">What The Flame Feels Like</span>
+              <span className="eyebrow">{feelsEyebrow}</span>
               <h2 style={{ marginBottom: '16px' }}>{feelsHeading}</h2>
               <p className="lead" style={{ marginBottom: '20px' }}>{feelsLead}</p>
               <p style={{ marginBottom: '24px' }}>{feelsBody}</p>
@@ -226,15 +234,11 @@ export default async function HomePage() {
       <section className="section--cream2" style={{ padding: '72px 0' }}>
         <div className="container--narrow" style={{ textAlign: 'center' }}>
           <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
-            Join the Community
+            {communityEyebrow}
           </span>
-          <h2 style={{ marginBottom: '20px' }}>This Is Why The Flame Exists.</h2>
-          <p className="lead" style={{ marginBottom: '8px' }}>
-            To help fan into flame the gifts God has already placed inside your child.
-          </p>
-          <p style={{ marginBottom: '32px', color: 'var(--mid)' }}>
-            We exist because a group of families believed children deserved more than a good education. They deserved a community that would call out the fire inside them. That&apos;s still what we&apos;re building — one family at a time.
-          </p>
+          <h2 style={{ marginBottom: '20px' }}>{communityHeading}</h2>
+          <p className="lead" style={{ marginBottom: '8px' }}>{communityLead}</p>
+          <p style={{ marginBottom: '32px', color: 'var(--mid)' }}>{communityBody}</p>
         </div>
       </section>
 
