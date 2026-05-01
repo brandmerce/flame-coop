@@ -97,7 +97,7 @@
   --gutter-mobile:     20px;
 
   /* Section spacing */
-  --section-v:         96px;
+  --section-v:         112px;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -112,14 +112,14 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 15px; /* ADA: 15px base — all rem values scale from here */
+  font-size: 18px; /* Editorial baseline — NYT/Atlantic standard */
 }
 
 body {
   font-family: var(--font-body);
-  font-size: 1rem;  /* 15px — clear, readable baseline */
+  font-size: 1rem;   /* 18px */
   font-weight: 400;
-  line-height: 1.78;
+  line-height: 1.88;
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -128,7 +128,7 @@ body {
 img { max-width: 100%; display: block; }
 a   { text-decoration: none; color: inherit; }
 button { cursor: pointer; border: none; background: none; font: inherit; }
-p { color: var(--text-mid); line-height: 1.85; margin-bottom: 1.1rem; }
+p { color: var(--text-mid); line-height: 1.88; margin-bottom: 1.4rem; }
 p:last-child { margin-bottom: 0; }
 
 /* ─────────────────────────────────────────────────────────────
@@ -320,9 +320,9 @@ h6, .h6 {
 
 .lead {
   font-family: var(--font-body);
-  font-size:   clamp(1rem, 1.1vw, 1.1rem);
-  font-weight: 400;  /* was 300 — too thin for ADA readability */
-  line-height: 1.85;
+  font-size:   clamp(1.05rem, 1.3vw, 1.15rem);
+  font-weight: 400;
+  line-height: 1.82;
   color:       var(--text-mid);
 }
 
@@ -409,11 +409,11 @@ h6, .h6 {
 
 .proof-row {
   display:     flex;
-  align-items: center;
-  gap:         14px;
-  font-size:   1rem;
+  align-items: flex-start;
+  gap:         16px;
+  font-size:   .94rem;
   color:       var(--text);
-  line-height: 1.75;
+  line-height: 1.78;
 }
 
 .proof-row::before {
@@ -438,11 +438,11 @@ h6, .h6 {
   align-items:     center;
   gap:             8px;
   font-family:     var(--font-body);
-  font-size:       .82rem;
+  font-size:       .78rem;
   font-weight:     600;
-  letter-spacing:  .08em;
+  letter-spacing:  .09em;
   text-transform:  uppercase;
-  padding:         14px 28px;
+  padding:         15px 32px;
   border-radius:   var(--radius);
   transition:      var(--transition);
   cursor:          pointer;
@@ -664,7 +664,7 @@ h6, .h6 {
 
 .card3__icon  { width: 36px; height: 36px; margin-bottom: 20px; opacity: .7; }
 .card3__title { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 600; color: var(--heading-alt); margin-bottom: 12px; line-height: 1.3; }
-.card3__body  { font-size: 1rem; color: rgba(255,255,255,.78); line-height: 1.78; }
+.card3__body  { font-size: .92rem; color: rgba(255,255,255,.82); line-height: 1.8; }
 
 @media (max-width: 900px) {
   .cards3 { grid-template-columns: 1fr; }
@@ -711,9 +711,9 @@ h6, .h6 {
   margin-top:      2px;
 }
 
-.program-tile__name  { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; color: var(--black); line-height: 1.2; margin-bottom: 3px; }
-.program-tile__ages  { font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-.program-tile__line  { font-size: .95rem; color: var(--mid); line-height: 1.65; }
+.program-tile__name  { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--black); line-height: 1.2; margin-bottom: 4px; }
+.program-tile__ages  { font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+.program-tile__line  { font-size: .88rem; color: var(--mid); line-height: 1.65; }
 
 /* ─────────────────────────────────────────────────────────────
    PROGRAM CARDS (detail)
@@ -752,7 +752,7 @@ h6, .h6 {
 
 .prog-card__body   { padding: 24px 28px; border-left: 1px solid rgba(166,146,100,.18); }
 .prog-card__theme  { font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-.prog-card__text   { font-size: 1rem; color: var(--dark); line-height: 1.78; }
+.prog-card__text   { font-size: .94rem; color: var(--dark); line-height: 1.8; }
 
 .prog-card--discipleship .prog-card__badge { background: #1A1512; }
 
@@ -775,16 +775,16 @@ h6, .h6 {
 
 .step {
   display:               grid;
-  grid-template-columns: 56px 1fr;
+  grid-template-columns: 64px 1fr;
   background:            var(--cream);
-  min-height:            80px;
+  min-height:            96px;
 }
 
 .step__num {
   background:      var(--gold);
   color:           #FFFFFF;
   font-family:     var(--font-heading);
-  font-size:       1.5rem;
+  font-size:       1.8rem;
   font-weight:     700;
   display:         flex;
   align-items:     center;
@@ -792,9 +792,9 @@ h6, .h6 {
   flex-shrink:     0;
 }
 
-.step__body  { padding: 20px 24px; border-left: 1px solid rgba(166,146,100,.18); display: flex; flex-direction: column; gap: 6px; }
-.step__title { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: var(--black); line-height: 1.2; }
-.step__text  { font-size: 1rem; color: var(--dark); line-height: 1.75; }
+.step__body  { padding: 24px 28px; border-left: 1px solid rgba(166,146,100,.18); display: flex; flex-direction: column; gap: 8px; }
+.step__title { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: var(--black); line-height: 1.25; }
+.step__text  { font-size: .94rem; color: var(--dark); line-height: 1.8; }
 .step__fee   { font-size: .78rem; color: var(--mid); font-style: italic; }
 
 /* ─────────────────────────────────────────────────────────────
@@ -984,12 +984,12 @@ h6, .h6 {
 
 .fit-list li {
   display:       flex;
-  gap:           16px;
+  gap:           18px;
   align-items:   flex-start;
   font-size:     1rem;
   color:         var(--dark);
-  line-height:   1.75;
-  padding:       14px 20px;
+  line-height:   1.78;
+  padding:       18px 24px;
   background:    var(--cream);
   border-radius: var(--radius);
   border-left:   2px solid transparent;
@@ -1078,7 +1078,7 @@ h6, .h6 {
 
 .mvv-card { background: var(--cream); padding: 32px 28px; }
 .mvv-card__label { font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; display: block; }
-.mvv-card__text  { font-size: 1rem; color: var(--dark); line-height: 1.8; }
+.mvv-card__text  { font-size: .94rem; color: var(--dark); line-height: 1.82; }
 
 @media (max-width: 900px) { .mvv-grid { grid-template-columns: 1fr; } }
 
@@ -1234,7 +1234,7 @@ footer {
 section { padding: var(--section-v) 0; }
 
 @media (max-width: 640px) {
-  :root { --section-v: 64px; }
+  :root { --section-v: 72px; }
 }
 
 /* ─────────────────────────────────────────────────────────────
