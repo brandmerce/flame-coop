@@ -74,8 +74,8 @@ export default function Hero({
       <div className="container hero__content">
         <div
           style={{
-            width:     '60%',
-            maxWidth:  '860px',
+            width:     '72%',
+            maxWidth:  '1000px',
             margin:    '0 auto',
             textAlign: 'center',
           }}
@@ -143,8 +143,8 @@ export default function Hero({
       </div>
 
       <style>{`
-        @media (max-width: 1024px) { .hero-content-inner { width: 75% !important; } }
-        @media (max-width: 768px)  { .hero-content-inner { width: 90% !important; } }
+        @media (max-width: 1024px) { .hero-content-inner { width: 85% !important; } }
+        @media (max-width: 768px)  { .hero-content-inner { width: 92% !important; } }
         @media (max-width: 480px)  { .hero-content-inner { width: 100% !important; } }
       `}</style>
     </section>
