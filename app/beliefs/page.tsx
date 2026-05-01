@@ -53,7 +53,7 @@ export default async function BeliefsPage() {
             Our Beliefs
           </span>
           <h1 style={{ color: '#FFFFFF', marginBottom: '20px' }}>{heroHeadline}</h1>
-          <p style={{ color: 'rgba(255,255,255,.65)', fontSize: '1.1rem', lineHeight: '1.85', fontWeight: 300 }}>
+          <p style={{ color: 'rgba(255,255,255,.82)', fontSize: '1.1rem', lineHeight: '1.85', fontWeight: 400 }}>
             {heroLead}
           </p>
         </div>

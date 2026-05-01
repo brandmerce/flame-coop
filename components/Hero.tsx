@@ -90,14 +90,9 @@ export default function Hero({
                 letterSpacing: '.3em',
                 textTransform: 'uppercase',
                 color:         'var(--gold-light)',
-                display:       'flex',
-                alignItems:    'center',
-                justifyContent:'center',
-                gap:           '10px',
                 marginBottom:  '24px',
               }}
             >
-              <span style={{ display: 'block', width: '32px', height: '1px', background: 'var(--gold-light)' }} />
               {eyebrow}
             </div>
           )}
@@ -109,9 +104,9 @@ export default function Hero({
           <p
             style={{
               color:        'rgba(255,255,255,.9)',
-              fontSize:     '1.15rem',
-              maxWidth:     '540px',
-              lineHeight:   '1.75',
+              fontSize:     '1.1rem',
+              maxWidth:     '700px',
+              lineHeight:   '1.78',
               fontWeight:   400,
               margin:       '0 auto',
               marginBottom: trustLine ? '8px' : '40px',

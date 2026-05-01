@@ -226,7 +226,6 @@ h6, .h6 {
 }
 
 .section--dark .eyebrow { color: var(--gold-light) !important; }
-.section--dark .eyebrow::before { background: var(--gold-light); }
 
 /* ─────────────────────────────────────────────────────────────
    CONTAINERS
@@ -295,23 +294,9 @@ h6, .h6 {
   margin-bottom:  14px;
 }
 
-.eyebrow::before {
-  content:     '';
-  display:     inline-block;
-  width:       24px;
-  height:      1px;
-  background:  var(--primary);
-  flex-shrink: 0;
-}
-
 .bg-dark .eyebrow, .bg-dark2 .eyebrow,
 .eyebrow-light, .hero .eyebrow, .section-dark .eyebrow {
   color: var(--primary-alt);
-}
-
-.bg-dark .eyebrow::before, .bg-dark2 .eyebrow::before,
-.eyebrow-light::before, .hero .eyebrow::before, .section-dark .eyebrow::before {
-  background: var(--primary-alt);
 }
 
 /* ─────────────────────────────────────────────────────────────
