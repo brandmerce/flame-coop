@@ -9,7 +9,7 @@ export default function ScriptureBanner({ reference, quote, citation }: Scriptur
     <div className="scripture">
       <div
         style={{
-          maxWidth:   '800px',
+          maxWidth:   '1060px',
           margin:     '0 auto',
           padding:    '0 32px',
           textAlign:  'center',
