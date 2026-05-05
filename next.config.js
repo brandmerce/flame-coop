@@ -11,18 +11,15 @@ const nextConfig = {
     },
   },
   webpack(config) {
-    // Shim the bare 'react' import so packages that import the not-yet-stable
-    // `useEffectEvent` (e.g. @sanity/vision in sanity v5) don't break the build.
-    config.resolve.alias['react'] = path.resolve(__dirname, 'lib/react-compat.js')
-
-    // Re-wire react subpath imports that the alias above would otherwise break.
-    // webpack resolves 'react/jsx-runtime' relative to the aliased file's
-    // directory, so we point each subpath explicitly back to the real React.
-    const reactDir = path.dirname(require.resolve('react/package.json'))
-    for (const sub of ['jsx-runtime', 'jsx-dev-runtime']) {
-      config.resolve.alias[`react/${sub}`] = path.resolve(reactDir, sub)
-    }
-
+    // EXACT-MATCH alias (`$` suffix) for the bare 'react' import only.
+    // - `import x from 'react'`          → matched → our shim (adds useEffectEvent)
+    // - `import x from 'react/jsx-runtime'` → NOT matched → real react/jsx-runtime
+    // - `import x from 'react/index.js'`    → NOT matched → real react (used by shim)
+    //
+    // Without `$`, webpack treats the alias as a prefix and rewrites every
+    // subpath import (jsx-runtime, jsx-dev-runtime, etc.) relative to the
+    // shim file, breaking JSX compilation across the whole app.
+    config.resolve.alias['react$'] = path.resolve(__dirname, 'lib/react-compat.js')
     return config
   },
 };
