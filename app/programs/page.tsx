@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const revalidate = 0; // always fetch fresh from Sanity
 
 import type { Metadata } from 'next';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
