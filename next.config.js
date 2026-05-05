@@ -11,10 +11,18 @@ const nextConfig = {
     },
   },
   webpack(config) {
-    // Shim 'react' so that packages importing the not-yet-stable
-    // `useEffectEvent` (e.g. @sanity/vision bundled with sanity v5)
-    // don't break the build on React 19.
+    // Shim the bare 'react' import so packages that import the not-yet-stable
+    // `useEffectEvent` (e.g. @sanity/vision in sanity v5) don't break the build.
     config.resolve.alias['react'] = path.resolve(__dirname, 'lib/react-compat.js')
+
+    // Re-wire react subpath imports that the alias above would otherwise break.
+    // webpack resolves 'react/jsx-runtime' relative to the aliased file's
+    // directory, so we point each subpath explicitly back to the real React.
+    const reactDir = path.dirname(require.resolve('react/package.json'))
+    for (const sub of ['jsx-runtime', 'jsx-dev-runtime']) {
+      config.resolve.alias[`react/${sub}`] = path.resolve(reactDir, sub)
+    }
+
     return config
   },
 };
