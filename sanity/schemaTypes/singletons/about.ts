@@ -19,9 +19,39 @@ export const about = defineType({
     defineField({ name: 'ogImage',        title: 'OG Image (Social Share Preview)',           type: 'image', group: 'seo' }),
 
     // ── HERO ──────────────────────────────────────────────────────────────────
+    defineField({
+      name: 'heroStyle',
+      title: 'Hero Style (Hero — choose how the top of the page looks)',
+      type: 'string',
+      group: 'hero',
+      options: {
+        list: [
+          { title: 'Cream block with dark text (default)',                          value: 'cream' },
+          { title: 'Background photo with dark overlay & white text (like Home)',  value: 'image' },
+          { title: 'No hero — page starts at first section',                       value: 'none' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'cream',
+    }),
     defineField({ name: 'heroEyebrow',  title: 'Eyebrow (Hero — small label above headline)', type: 'string', group: 'hero' }),
     defineField({ name: 'heroHeadline', title: 'Headline (Hero — main page title)',           type: 'string', group: 'hero' }),
     defineField({ name: 'heroLead',     title: 'Lead Paragraph (Hero — intro text)',          type: 'text', rows: 3, group: 'hero' }),
+    defineField({
+      name: 'heroImage',
+      title: 'Background Image (Hero — only used when style is "Background photo")',
+      type: 'image',
+      options: { hotspot: true },
+      group: 'hero',
+      hidden: ({ parent }) => parent?.heroStyle !== 'image',
+    }),
+    defineField({
+      name: 'heroImageAlt',
+      title: 'Background Image Alt Text (Hero — accessibility description)',
+      type: 'string',
+      group: 'hero',
+      hidden: ({ parent }) => parent?.heroStyle !== 'image',
+    }),
 
     // ── OUR STORY ─────────────────────────────────────────────────────────────
     defineField({ name: 'storyEyebrow', title: 'Eyebrow (Our Story — small label above heading)', type: 'string', group: 'story' }),

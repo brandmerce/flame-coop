@@ -2,6 +2,7 @@ export const revalidate = 60;
 
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Hero from '@/components/Hero';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
 import { getAbout } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
@@ -32,9 +33,12 @@ export default async function AboutPage() {
   const cms = await getAbout();
 
   // ── Hero ──────────────────────────────────────────────────────────────────
+  const heroStyle    = (cms?.heroStyle as 'cream' | 'image' | 'none') ?? 'cream';
   const heroEyebrow  = cms?.heroEyebrow  ?? 'About The Flame';
   const heroHeadline = cms?.heroHeadline ?? 'Built by Families. Fueled by Faith. On Fire for Jesus.';
   const heroLead     = cms?.heroLead     ?? 'The Flame exists because homeschool families believed children deserved more than a good education — they deserved a community that would call out the fire God placed inside them.';
+  const heroImageSrc = cms?.heroImage ? urlFor(cms.heroImage).width(2400).url() : undefined;
+  const heroImageAlt = cms?.heroImageAlt ?? 'The Flame community';
 
   // ── Our Story ─────────────────────────────────────────────────────────────
   const storyEyebrow   = cms?.storyEyebrow   ?? 'Our Story';
@@ -91,15 +95,25 @@ export default async function AboutPage() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
-        <div className="container--narrow" style={{ textAlign: 'center' }}>
-          <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
-            {heroEyebrow}
-          </span>
-          <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
-          <p className="lead">{heroLead}</p>
-        </div>
-      </section>
+      {heroStyle === 'image' ? (
+        <Hero
+          eyebrow={heroEyebrow}
+          headline={heroHeadline}
+          subheadline={heroLead}
+          imageSrc={heroImageSrc}
+          imageAlt={heroImageAlt}
+        />
+      ) : heroStyle === 'cream' ? (
+        <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
+          <div className="container--narrow" style={{ textAlign: 'center' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
+              {heroEyebrow}
+            </span>
+            <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
+            <p className="lead">{heroLead}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* OUR STORY */}
       <section style={{ padding: 'var(--section-v) 0' }}>
