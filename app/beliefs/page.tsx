@@ -3,7 +3,9 @@ export const revalidate = 0; // always fetch fresh from Sanity
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
+import Hero from '@/components/Hero';
 import { getBeliefs } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
 const defaultBeliefs = [
   'The Bible is the inspired, infallible, and authoritative Word of God — our ultimate guide for faith, learning, and life.',
@@ -33,6 +35,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function BeliefsPage() {
   const cms = await getBeliefs();
 
+  const heroStyle    = (cms?.heroStyle as 'cream' | 'image' | 'none' | 'dark') ?? 'dark'
+  const heroEyebrow  = cms?.heroEyebrow  ?? 'Our Beliefs'
+  const heroImageSrc = cms?.heroImage ? urlFor(cms.heroImage).width(2400).url() : undefined
+  const heroImageAlt = cms?.heroImageAlt ?? undefined
+
   const heroHeadline       = cms?.heroHeadline       ?? 'Rooted in God\'s Word. Alive in His Spirit.';
   const heroLead           = cms?.heroLead           ?? 'Our faith in Jesus Christ is not the backdrop to our education. It is the foundation. Every program, every class, every conversation, and every relationship is shaped by what we believe.';
   const statementTitle     = cms?.statementTitle     ?? 'What We Believe — Said Plainly.';
@@ -47,17 +54,19 @@ export default async function BeliefsPage() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '80px 0 64px', background: 'var(--obsidian)' }}>
-        <div className="container--narrow" style={{ textAlign: 'center' }}>
-          <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center', color: 'var(--gold-light)' }}>
-            Our Beliefs
-          </span>
-          <h1 style={{ color: '#FFFFFF', marginBottom: '20px' }}>{heroHeadline}</h1>
-          <p style={{ color: 'rgba(255,255,255,.82)', fontSize: '1.1rem', lineHeight: '1.85', fontWeight: 400 }}>
-            {heroLead}
-          </p>
-        </div>
-      </section>
+      {heroStyle === 'image' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} imageSrc={heroImageSrc} imageAlt={heroImageAlt} />
+      ) : heroStyle === 'dark' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} />
+      ) : heroStyle === 'cream' ? (
+        <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
+          <div className="container--narrow" style={{ textAlign: 'center' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>{heroEyebrow}</span>
+            <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
+            <p className="lead">{heroLead}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* STATEMENT OF FAITH */}
       <section style={{ padding: 'var(--section-v) 0' }}>

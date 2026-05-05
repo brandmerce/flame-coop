@@ -3,7 +3,7 @@ import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './sanity/schemaTypes'
 
-const singletonTypes = ['siteSettings', 'navigation', 'homepage', 'about', 'beliefs', 'admissions', 'tuition']
+const singletonTypes = ['siteSettings', 'navigation', 'homepage', 'about', 'beliefs', 'admissions', 'tuition', 'programs']
 
 export default defineConfig({
   name:    'flame-coop',
@@ -32,6 +32,8 @@ export default defineConfig({
               .child(S.document().schemaType('admissions').documentId('admissions')),
             S.listItem().title('Tuition & Scholarship').id('tuition')
               .child(S.document().schemaType('tuition').documentId('tuition')),
+            S.listItem().title('Programs Page Hero').id('programs')
+              .child(S.document().schemaType('programs').documentId('programs')),
             S.divider(),
             S.documentTypeListItem('program').title('Programs'),
             S.documentTypeListItem('subject').title('Academic Subjects'),

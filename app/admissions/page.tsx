@@ -3,7 +3,9 @@ export const revalidate = 0; // always fetch fresh from Sanity
 import type { Metadata } from 'next';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
 import AdmissionsForm from '@/components/AdmissionsForm';
+import Hero from '@/components/Hero';
 import { getAdmissions } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
 const defaultFitItems = [
   'You share our Statement of Faith and are committed to raising your children in the Christian tradition.',
@@ -29,6 +31,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AdmissionsPage() {
   const cms = await getAdmissions();
 
+  const heroStyle    = (cms?.heroStyle as 'cream' | 'image' | 'none' | 'dark') ?? 'cream'
+  const heroEyebrow  = cms?.heroEyebrow  ?? 'Admissions'
+  const heroImageSrc = cms?.heroImage ? urlFor(cms.heroImage).width(2400).url() : undefined
+  const heroImageAlt = cms?.heroImageAlt ?? undefined
+
   const heroHeadline = cms?.heroHeadline ?? 'The Journey Into The Flame Starts Here.';
   const heroLead     = cms?.heroLead     ?? "Admissions at The Flame is more than paperwork. It's the beginning of a Spirit-led partnership between your family and a community committed to helping your child grow in faith, wisdom, and purpose.";
   const fitItems     = cms?.fitItems?.length ? cms.fitItems : defaultFitItems;
@@ -40,15 +47,19 @@ export default async function AdmissionsPage() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
-        <div className="container--narrow" style={{ textAlign: 'center' }}>
-          <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
-            Admissions
-          </span>
-          <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
-          <p className="lead">{heroLead}</p>
-        </div>
-      </section>
+      {heroStyle === 'image' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} imageSrc={heroImageSrc} imageAlt={heroImageAlt} />
+      ) : heroStyle === 'dark' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} />
+      ) : heroStyle === 'cream' ? (
+        <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
+          <div className="container--narrow" style={{ textAlign: 'center' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>{heroEyebrow}</span>
+            <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
+            <p className="lead">{heroLead}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* BEFORE YOU APPLY */}
       <section style={{ padding: 'var(--section-v) 0' }}>

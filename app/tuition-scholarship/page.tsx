@@ -3,7 +3,9 @@ export const revalidate = 0; // always fetch fresh from Sanity
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
+import Hero from '@/components/Hero';
 import { getTuition } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
 const defaultTuitionRows = [
   { program: 'Sparks — Kindergarten',                             appFee1: '$50', appFeeAdd: '$25', supplyFee: '$200', regFee: '$500',   bgFee: '$20', tuitionTotal: '$3,000', grandTotal: '$3,500' },
@@ -45,6 +47,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function TuitionPage() {
   const cms = await getTuition();
 
+  const heroStyle    = (cms?.heroStyle as 'cream' | 'image' | 'none' | 'dark') ?? 'cream'
+  const heroEyebrow  = cms?.heroEyebrow  ?? 'Tuition & Scholarship'
+  const heroImageSrc = cms?.heroImage ? urlFor(cms.heroImage).width(2400).url() : undefined
+  const heroImageAlt = cms?.heroImageAlt ?? undefined
+
   const heroHeadline       = cms?.heroHeadline       ?? 'An Investment in Faith, Formation, and Future.';
   const heroLead           = cms?.heroLead           ?? 'We know tuition is a meaningful decision for every family. Our goal is to make the process clear, transparent, and connected to the mission.';
   const tableIntroHeading  = cms?.tableIntroHeading  ?? 'Clear Numbers. No Surprises.';
@@ -60,15 +67,19 @@ export default async function TuitionPage() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
-        <div className="container--narrow" style={{ textAlign: 'center' }}>
-          <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
-            Tuition &amp; Scholarship
-          </span>
-          <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
-          <p className="lead">{heroLead}</p>
-        </div>
-      </section>
+      {heroStyle === 'image' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} imageSrc={heroImageSrc} imageAlt={heroImageAlt} />
+      ) : heroStyle === 'dark' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} />
+      ) : heroStyle === 'cream' ? (
+        <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
+          <div className="container--narrow" style={{ textAlign: 'center' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>{heroEyebrow}</span>
+            <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
+            <p className="lead">{heroLead}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* TUITION TABLE */}
       <section style={{ padding: 'var(--section-v) 0' }}>

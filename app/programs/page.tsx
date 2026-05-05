@@ -2,7 +2,9 @@ export const revalidate = 0; // always fetch fresh from Sanity
 
 import type { Metadata } from 'next';
 import ImagePlaceholder from '@/components/ImagePlaceholder';
-import { getPrograms } from '@/sanity/lib/queries';
+import Hero from '@/components/Hero';
+import { getPrograms, getPagePrograms } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 
 const defaultElementary = [
   { name: 'Sparks',       level: 'Kindergarten', ages: 'Ages 5–6',   theme: 'The First Spark',             description: "Play-based, warm, and full of wonder. Children build early phonics, number sense, listening skills, and social confidence while being introduced to God as Creator and Father. This stage is joyful by design — because first impressions of learning should be good ones." },
@@ -43,7 +45,14 @@ function renderBadgeLabel(label: string) {
 }
 
 export default async function ProgramsPage() {
-  const sanityPrograms = await getPrograms();
+  const [sanityPrograms, cmsPage] = await Promise.all([getPrograms(), getPagePrograms()])
+
+  const heroStyle    = (cmsPage?.heroStyle as 'cream' | 'image' | 'none' | 'dark') ?? 'cream'
+  const heroEyebrow  = cmsPage?.heroEyebrow  ?? 'Our Programs'
+  const heroHeadline = cmsPage?.heroHeadline ?? 'Every Program Is a Step Deeper Into the Fire.'
+  const heroLead     = cmsPage?.heroLead     ?? "From Kindergarten through high school — academically rich, spiritually rooted, moving at your child's actual pace."
+  const heroImageSrc = cmsPage?.heroImage ? urlFor(cmsPage.heroImage).width(2400).url() : undefined
+  const heroImageAlt = cmsPage?.heroImageAlt ?? undefined
 
   const elementaryPrograms   = sanityPrograms?.filter((p: { variant: string }) => p.variant === 'elementary')   ?? [];
   const discipleshipPrograms = sanityPrograms?.filter((p: { variant: string }) => p.variant === 'discipleship') ?? [];
@@ -54,15 +63,19 @@ export default async function ProgramsPage() {
   return (
     <>
       {/* HERO */}
-      <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
-        <div className="container--narrow" style={{ textAlign: 'center' }}>
-          <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>
-            Our Programs
-          </span>
-          <h1 style={{ marginBottom: '20px' }}>Every Program Is a Step Deeper Into the Fire.</h1>
-          <p className="lead">From Kindergarten through high school — academically rich, spiritually rooted, moving at your child&apos;s actual pace.</p>
-        </div>
-      </section>
+      {heroStyle === 'image' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} imageSrc={heroImageSrc} imageAlt={heroImageAlt} />
+      ) : heroStyle === 'dark' ? (
+        <Hero eyebrow={heroEyebrow} headline={heroHeadline} subheadline={heroLead} />
+      ) : heroStyle === 'cream' ? (
+        <section style={{ padding: '80px 0 64px', background: 'var(--cream2)' }}>
+          <div className="container--narrow" style={{ textAlign: 'center' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>{heroEyebrow}</span>
+            <h1 style={{ marginBottom: '20px' }}>{heroHeadline}</h1>
+            <p className="lead">{heroLead}</p>
+          </div>
+        </section>
+      ) : null}
 
       {/* HOW THE LEVELS WORK */}
       <section style={{ padding: 'var(--section-v) 0' }}>

@@ -50,7 +50,8 @@ export async function getAbout() {
 export async function getBeliefs() {
   return client.fetch(groq`*[_type == "beliefs" && _id == "beliefs"][0] {
     seoTitle, seoDescription, ogImage ${imageFields},
-    heroHeadline, heroLead,
+    heroStyle, heroEyebrow, heroHeadline, heroLead,
+    heroImage ${imageFields}, heroImageAlt,
     statementTitle, statementIntro, beliefsList,
     faithClassroomTitle, "faithClassroomBody": pt::text(faithClassroomBody),
     formationTitle, formationQuote, formationBody,
@@ -61,7 +62,8 @@ export async function getBeliefs() {
 export async function getAdmissions() {
   return client.fetch(groq`*[_type == "admissions" && _id == "admissions"][0] {
     seoTitle, seoDescription, ogImage ${imageFields},
-    heroHeadline, heroLead,
+    heroStyle, heroEyebrow, heroHeadline, heroLead,
+    heroImage ${imageFields}, heroImageAlt,
     fitItems,
     enrollmentOpen, enrollmentOpenMessage, enrollmentClosedMessage,
     "afterEnrollBody": pt::text(afterEnrollBody),
@@ -72,12 +74,21 @@ export async function getAdmissions() {
 export async function getTuition() {
   return client.fetch(groq`*[_type == "tuition" && _id == "tuition"][0] {
     seoTitle, seoDescription, ogImage ${imageFields},
-    heroHeadline, heroLead,
+    heroStyle, heroEyebrow, heroHeadline, heroLead,
+    heroImage ${imageFields}, heroImageAlt,
     tableIntroHeading, tableIntroBody, tableFootnote,
     tuitionRows[] { program, appFee1, appFeeAdd, supplyFee, regFee, bgFee, tuitionTotal, grandTotal },
     callouts[] { program, total, note },
     scholarshipsHeading, scholarshipsIntro, scholarshipsBody,
     scholarships[] { name, desc },
+  }`)
+}
+
+// ── PROGRAMS PAGE ─────────────────────────────────────────────────────────────
+export async function getPagePrograms() {
+  return client.fetch(groq`*[_type == "programs" && _id == "programs"][0] {
+    heroStyle, heroEyebrow, heroHeadline, heroLead,
+    heroImage ${imageFields}, heroImageAlt,
   }`)
 }
 
