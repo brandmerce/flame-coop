@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const EDUWEBY_URL = 'https://eduweby.com/embed/form?tenant=flame-christian-coop';
 
@@ -10,6 +10,7 @@ export function openRequestInfoModal() {
 
 export default function RequestInfoModal() {
   const [open, setOpen] = useState(false);
+  const wasOpenRef = useRef(false);
 
   useEffect(() => {
     const handler = () => setOpen(true);
@@ -25,20 +26,25 @@ export default function RequestInfoModal() {
 
   // iOS-compatible scroll lock: overflow:hidden alone doesn't work on iOS Safari.
   // position:fixed + storing/restoring scrollY is the standard fix.
+  // Guard: only run the restore branch if the modal was actually open before.
   useEffect(() => {
     if (open) {
+      wasOpenRef.current = true;
       const scrollY = window.scrollY;
       document.body.style.position   = 'fixed';
       document.body.style.top        = `-${scrollY}px`;
       document.body.style.width      = '100%';
       document.body.style.overflowY  = 'scroll'; // keeps scrollbar space to prevent layout shift
-    } else {
-      const scrollY = document.body.style.top;
+    } else if (wasOpenRef.current) {
+      // Only restore scroll if the modal was previously open
+      const savedTop = document.body.style.top;
       document.body.style.position   = '';
       document.body.style.top        = '';
       document.body.style.width      = '';
       document.body.style.overflowY  = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      if (savedTop) {
+        window.scrollTo(0, parseInt(savedTop) * -1);
+      }
     }
     return () => {
       document.body.style.position  = '';
@@ -83,25 +89,7 @@ export default function RequestInfoModal() {
         }
       `}</style>
 
-      {/*
-        Iframe pre-loaded off-screen so it's ready before anyone clicks.
-        visibility:hidden is more reliable than opacity:0 for forcing browser fetch
-        without triggering lazy-load deferrals.
-      */}
-      <div
-        aria-hidden="true"
-        style={{ position: 'fixed', left: '-9999px', top: 0, width: '860px', visibility: 'hidden' }}
-      >
-        <iframe
-          id="eduweby-preload"
-          src={EDUWEBY_URL}
-          style={{ border: 'none', width: '100%', height: '900px' }}
-          title="Request Information Form (preload)"
-          tabIndex={-1}
-        />
-      </div>
-
-      {/* Modal overlay — swaps in the same already-loaded iframe src */}
+      {/* Modal overlay */}
       <div
         className={`rim-overlay${open ? ' open' : ''}`}
         onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
@@ -126,7 +114,7 @@ export default function RequestInfoModal() {
             </button>
           </div>
           <iframe
-            src={EDUWEBY_URL}
+            src={open ? EDUWEBY_URL : undefined}
             style={{ border: 'none', width: '100%', minHeight: '800px', display: 'block' }}
             title="Request Information Form"
           />
