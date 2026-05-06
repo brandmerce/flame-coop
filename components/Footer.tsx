@@ -78,6 +78,11 @@ export default async function Footer() {
         <div className="footer__bottom">
           <p className="footer__copy">
             © {year} The Flame Christian Cooperative. All rights reserved.
+            {' · '}
+            <a href="https://eduweby.com" target="_blank" rel="noopener noreferrer"
+              style={{ color: 'inherit', opacity: 0.5, textDecoration: 'none' }}>
+              Website by Eduweby
+            </a>
           </p>
           <div className="footer__legal">
             <Link href="/legal/privacy-policy">Privacy Policy</Link>
