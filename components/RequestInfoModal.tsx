@@ -9,12 +9,19 @@ export function openRequestInfoModal() {
 }
 
 export default function RequestInfoModal() {
-  const [open, setOpen] = useState(false);
-  const wasOpenRef  = useRef(false);
-  const savedScrollY = useRef(0); // ref survives effect cleanup runs
+  const [open, setOpen]                       = useState(false);
+  const [renderFullscreen, setRenderFullscreen] = useState(false);
+  const wasOpenRef    = useRef(false);
+  const savedScrollY  = useRef(0);
 
   useEffect(() => {
-    const handler = () => setOpen(true);
+    const handler = () => {
+      // Set both states together so the first render after click already has
+      // the fullscreen layout class — avoids a flash of "absolute 1x1" with
+      // the open class applied.
+      setRenderFullscreen(true);
+      setOpen(true);
+    };
     window.addEventListener('open-request-info-modal', handler);
     return () => window.removeEventListener('open-request-info-modal', handler);
   }, []);
@@ -25,12 +32,20 @@ export default function RequestInfoModal() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // iOS-compatible scroll lock.
-  // BUG FIXED: React runs the *cleanup* of the previous effect before the new
-  // effect, so reading document.body.style.top in the else branch always got ''
-  // (already cleared by cleanup). Storing scrollY in a ref means it survives
-  // the cleanup run. requestAnimationFrame ensures the scroll restore fires
-  // after the browser has processed the style removal.
+  // After modal is closed, wait for fade-out to finish before collapsing the
+  // overlay back to its tiny absolute-positioned state. Otherwise the modal
+  // would visually disappear instantly instead of fading out smoothly.
+  useEffect(() => {
+    if (!open && renderFullscreen) {
+      const t = setTimeout(() => setRenderFullscreen(false), 260);
+      return () => clearTimeout(t);
+    }
+  }, [open, renderFullscreen]);
+
+  // iOS-compatible scroll lock: position:fixed + saved scrollY pattern.
+  // savedScrollY ref survives effect cleanup (which always runs first when
+  // open changes). requestAnimationFrame ensures scroll restore fires after
+  // the browser has applied the position:fixed removal.
   useEffect(() => {
     if (open) {
       wasOpenRef.current   = true;
@@ -44,7 +59,6 @@ export default function RequestInfoModal() {
       document.body.style.top       = '';
       document.body.style.width     = '';
       document.body.style.overflowY = '';
-      // rAF: let the browser apply the style removal before jumping scroll
       requestAnimationFrame(() => {
         window.scrollTo(0, savedScrollY.current);
       });
@@ -57,12 +71,41 @@ export default function RequestInfoModal() {
     };
   }, [open]);
 
+  const overlayClasses = [
+    'rim-overlay',
+    renderFullscreen ? 'rim-overlay--full' : '',
+    open ? 'open' : '',
+  ].filter(Boolean).join(' ');
+
   return (
     <>
       <style>{`
+        /*
+         * Default (closed) state: a 1x1 absolute-positioned dot.
+         * Crucially does NOT cover the viewport — so the iframe inside can
+         * stay always-mounted and loaded WITHOUT triggering the iOS Safari
+         * touch-scroll bug that fullscreen position:fixed elements cause.
+         * The iframe loads on initial page mount; when the modal is opened
+         * the iframe is already fully rendered → modal appears instantly.
+         */
         .rim-overlay {
+          position:       absolute;
+          top:            0;
+          left:           0;
+          width:          1px;
+          height:         1px;
+          overflow:       hidden;
+          opacity:        0;
+          pointer-events: none;
+          transition:     opacity .22s ease;
+        }
+
+        /* Open layout — applied while the modal is open AND during fade-out */
+        .rim-overlay--full {
           position:                    fixed;
           inset:                       0;
+          width:                       auto;
+          height:                      auto;
           background:                  rgba(20,20,20,.7);
           z-index:                     1000;
           overflow-y:                  auto;
@@ -72,14 +115,14 @@ export default function RequestInfoModal() {
           align-items:                 flex-start;
           justify-content:             center;
           padding:                     40px 16px;
-          opacity:                     0;
-          pointer-events:              none;
-          transition:                  opacity .22s ease;
         }
-        .rim-overlay.open {
+
+        /* Visible (post-fade-in) — opacity 1 + interactive */
+        .rim-overlay--full.open {
           opacity:        1;
           pointer-events: all;
         }
+
         .rim-sheet {
           background:    #fff;
           border-radius: 8px;
@@ -89,77 +132,36 @@ export default function RequestInfoModal() {
           transform:     translateY(16px);
           transition:    transform .28s cubic-bezier(.4,0,.2,1);
         }
-        .rim-overlay.open .rim-sheet {
+        .rim-overlay--full.open .rim-sheet {
           transform: translateY(0);
         }
 
-        /* Full-screen modal on mobile — maximises form field width */
+        /* Mobile: full-screen sheet for max form field width.
+           NOTE: no align-items:stretch — sheet must size to its tall content
+           so the overlay's overflow-y:auto can actually scroll. */
         @media (max-width: 600px) {
-          .rim-overlay {
-            padding:     0;
-            align-items: stretch;
+          .rim-overlay--full {
+            padding: 0;
           }
           .rim-sheet {
             border-radius: 0;
+            overflow:      visible;
           }
-          /*
-           * Make iframe tall enough that eduweby's form never needs to scroll
-           * internally — the modal overlay handles all scrolling. Avoids the
-           * nested-scroll-context bug where touch scroll fights between the
-           * iframe's internal scroll and the modal overlay's scroll on iOS.
-           */
+          /* Tall enough to render eduweby's full form without internal
+             iframe scrolling — the modal overlay handles all scrolling. */
           .rim-form-iframe {
             min-height: 2400px !important;
           }
         }
-
-        /*
-         * Preload iframe: warms the HTTP cache so the visible iframe renders
-         * near-instantly when the modal opens. position:absolute (NOT fixed)
-         * + 1x1px at top:0,left:0 keeps it completely out of the way and does
-         * NOT interfere with iOS Safari touch scroll the way a position:fixed
-         * preload iframe would.
-         */
-        .rim-preload {
-          position:       absolute;
-          top:            0;
-          left:           0;
-          width:          1px;
-          height:         1px;
-          opacity:        0;
-          visibility:     hidden;
-          pointer-events: none;
-          border:         0;
-        }
       `}</style>
 
-      {/*
-        Hidden preload iframe — loads eduweby form into the HTTP cache so the
-        visible modal iframe renders near-instantly when opened. position is
-        absolute (NOT fixed) and sized 1x1px, so it does NOT cover the
-        viewport and does NOT interfere with iOS Safari page scroll the way
-        the previous fixed/-9999px preload iframe did.
-      */}
-      <iframe
-        src={EDUWEBY_URL}
-        className="rim-preload"
-        title="Request Information Form (preload)"
-        aria-hidden="true"
-        tabIndex={-1}
-      />
-
-      {/*
-        Visible modal iframe — lazy-loaded (src only when open) so the page
-        scroll stays unaffected by a fully-loaded iframe inside the
-        position:fixed overlay. The preload iframe above primes the cache so
-        loading from src on open is near-instant.
-      */}
       <div
-        className={`rim-overlay${open ? ' open' : ''}`}
+        className={overlayClasses}
         onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
         aria-modal="true"
         role="dialog"
         aria-label="Request Information"
+        aria-hidden={!open}
       >
         <div className="rim-sheet">
           <div style={{
@@ -178,8 +180,15 @@ export default function RequestInfoModal() {
               ×
             </button>
           </div>
+          {/*
+            Always-mounted iframe with src always set — loads on page mount.
+            Safe because when closed the parent overlay is 1x1 absolute,
+            NOT a fullscreen position:fixed element (which would break iOS
+            scroll). When the modal opens, the iframe is already fully
+            rendered → instant appearance.
+          */}
           <iframe
-            src={open ? EDUWEBY_URL : undefined}
+            src={EDUWEBY_URL}
             className="rim-form-iframe"
             style={{ border: 'none', width: '100%', minHeight: '800px', display: 'block' }}
             title="Request Information Form"
