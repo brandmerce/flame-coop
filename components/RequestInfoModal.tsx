@@ -24,9 +24,7 @@ export default function RequestInfoModal() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // iOS-compatible scroll lock: overflow:hidden alone doesn't work on iOS Safari.
-  // position:fixed + storing/restoring scrollY is the standard fix.
-  // Guard: only run the restore branch if the modal was actually open before.
+  // iOS-compatible scroll lock
   useEffect(() => {
     if (open) {
       wasOpenRef.current = true;
@@ -34,9 +32,8 @@ export default function RequestInfoModal() {
       document.body.style.position   = 'fixed';
       document.body.style.top        = `-${scrollY}px`;
       document.body.style.width      = '100%';
-      document.body.style.overflowY  = 'scroll'; // keeps scrollbar space to prevent layout shift
+      document.body.style.overflowY  = 'scroll';
     } else if (wasOpenRef.current) {
-      // Only restore scroll if the modal was previously open
       const savedTop = document.body.style.top;
       document.body.style.position   = '';
       document.body.style.top        = '';
@@ -58,18 +55,20 @@ export default function RequestInfoModal() {
     <>
       <style>{`
         .rim-overlay {
-          position:        fixed;
-          inset:           0;
-          background:      rgba(20,20,20,.7);
-          z-index:         1000;
-          overflow-y:      auto;
-          display:         flex;
-          align-items:     flex-start;
-          justify-content: center;
-          padding:         40px 16px;
-          opacity:         0;
-          pointer-events:  none;
-          transition:      opacity .22s ease;
+          position:                    fixed;
+          inset:                       0;
+          background:                  rgba(20,20,20,.7);
+          z-index:                     1000;
+          overflow-y:                  auto;
+          -webkit-overflow-scrolling:  touch;
+          overscroll-behavior:         contain;
+          display:                     flex;
+          align-items:                 flex-start;
+          justify-content:             center;
+          padding:                     40px 16px;
+          opacity:                     0;
+          pointer-events:              none;
+          transition:                  opacity .22s ease;
         }
         .rim-overlay.open {
           opacity:        1;
@@ -87,9 +86,32 @@ export default function RequestInfoModal() {
         .rim-overlay.open .rim-sheet {
           transform: translateY(0);
         }
+
+        /* Full-screen modal on mobile — maximises form field width */
+        @media (max-width: 600px) {
+          .rim-overlay {
+            padding:     0;
+            align-items: stretch;
+          }
+          .rim-sheet {
+            border-radius: 0;
+            min-height:    100dvh;
+            display:       flex;
+            flex-direction: column;
+          }
+          .rim-sheet iframe {
+            flex: 1;
+            min-height: 0 !important;
+            height:     100% !important;
+          }
+        }
       `}</style>
 
-      {/* Modal overlay */}
+      {/*
+        iframe always in the DOM so it preloads immediately on page load.
+        The overlay is invisible + pointer-events:none when closed, so the
+        iframe doesn't interfere with page scroll even though it's mounted.
+      */}
       <div
         className={`rim-overlay${open ? ' open' : ''}`}
         onClick={(e) => { if (e.target === e.currentTarget) setOpen(false); }}
@@ -101,6 +123,7 @@ export default function RequestInfoModal() {
           <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             padding: '20px 24px', borderBottom: '1px solid var(--cream2)',
+            flexShrink: 0,
           }}>
             <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', fontWeight: 600, color: 'var(--obsidian)' }}>
               Request Information
@@ -114,7 +137,7 @@ export default function RequestInfoModal() {
             </button>
           </div>
           <iframe
-            src={open ? EDUWEBY_URL : undefined}
+            src={EDUWEBY_URL}
             style={{ border: 'none', width: '100%', minHeight: '800px', display: 'block' }}
             title="Request Information Form"
           />
