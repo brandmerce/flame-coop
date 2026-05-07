@@ -100,7 +100,7 @@ export default async function LegalPage({ params }: { params: Promise<{ slug: st
     <section style={{ padding: '80px 0 100px' }}>
       <div className="container--narrow">
         <h1 style={{ marginBottom: '40px' }}>{page.title}</h1>
-        <div style={{ fontSize: '1rem', lineHeight: 1.8, color: 'var(--ink)' }}>
+        <div style={{ fontSize: '1rem', lineHeight: 1.8, color: 'var(--text)' }}>
           {Array.isArray(page.body) ? renderBlocks(page.body as PtBlock[]) : null}
         </div>
       </div>

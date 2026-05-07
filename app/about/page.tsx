@@ -232,7 +232,7 @@ export default async function AboutPage() {
                   )}
                 </div>
                 <div className="director-card__body">
-                  <div className="director-card__name">{d.name}</div>
+                  <h3 className="director-card__name">{d.name}</h3>
                   <div className="director-card__title-text">{d.titleText}</div>
                   {d.bio  && <p className="director-card__bio">{d.bio}</p>}
                   {d.bio2 && <p className="director-card__bio" style={{ marginTop: '10px' }}>{d.bio2}</p>}

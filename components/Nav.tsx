@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { openRequestInfoModal } from '@/components/RequestInfoModal';
@@ -16,6 +16,8 @@ const navLinks = [
 export default function Nav() {
   const [scrolled,    setScrolled]    = useState(false);
   const [mobileOpen,  setMobileOpen]  = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const toggleRef     = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -23,8 +25,37 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
+  // Close mobile menu on Escape key (WCAG 2.1.1)
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileOpen(false);
+        toggleRef.current?.focus(); // return focus to toggle button
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [mobileOpen]);
+
+  // Focus trap inside mobile menu (WCAG 2.4.3)
+  const handleMenuKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key !== 'Tab' || !mobileMenuRef.current) return;
+    const focusable = mobileMenuRef.current.querySelectorAll<HTMLElement>(
+      'a, button, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last  = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }, []);
+
   return (
-    <nav className={`nav${scrolled ? ' scrolled' : ''}`} id="main-nav">
+    <nav className={`nav${scrolled ? ' scrolled' : ''}`} id="main-nav" aria-label="Main navigation">
       <div className="nav__inner">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 flex-shrink-0" aria-label="The Flame Christian Co-op — Home">
@@ -73,9 +104,12 @@ export default function Nav() {
 
         {/* Mobile toggle */}
         <button
+          ref={toggleRef}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-menu"
           onClick={() => setMobileOpen((o) => !o)}
-          style={{ display: 'none', flexDirection: 'column', gap: '5px', padding: '8px', cursor: 'pointer' }}
+          style={{ display: 'none', flexDirection: 'column', gap: '5px', padding: '8px', cursor: 'pointer', minWidth: '44px', minHeight: '44px', alignItems: 'center', justifyContent: 'center' }}
           className="nav-mobile-toggle"
         >
           <span style={{ display: 'block', width: '22px', height: '1.5px', background: 'var(--dark)', transition: 'var(--transition)' }} />
@@ -86,11 +120,18 @@ export default function Nav() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div style={{
-          position: 'fixed', top: '72px', left: 0, right: 0,
-          background: 'var(--bg)', borderBottom: '1px solid rgba(166,146,100,.15)',
-          padding: '16px 32px 24px', zIndex: 99,
-        }}>
+        <div
+          id="mobile-menu"
+          ref={mobileMenuRef}
+          role="navigation"
+          aria-label="Mobile navigation"
+          onKeyDown={handleMenuKeyDown}
+          style={{
+            position: 'fixed', top: '72px', left: 0, right: 0,
+            background: 'var(--bg)', borderBottom: '1px solid rgba(166,146,100,.15)',
+            padding: '16px 32px 24px', zIndex: 99,
+          }}
+        >
           {navLinks.map((l) => (
             <Link
               key={l.href}

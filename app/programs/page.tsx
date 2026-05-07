@@ -42,9 +42,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 function renderBadgeLabel(label: string) {
-  if (label === 'DI')   return <><span>D</span><span style={{ fontSize: '.7em' }}>I</span></>;
-  if (label === 'DII')  return <><span>D</span><span style={{ fontSize: '.7em' }}>II</span></>;
-  if (label === 'DIII') return <><span>D</span><span style={{ fontSize: '.7em' }}>III</span></>;
+  const ariaMap: Record<string, string> = { DI: 'Discipleship 1', DII: 'Discipleship 2', DIII: 'Discipleship 3' };
+  if (label === 'DI')   return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.7em' }}>I</span></span>;
+  if (label === 'DII')  return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.7em' }}>II</span></span>;
+  if (label === 'DIII') return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.7em' }}>III</span></span>;
   return label;
 }
 
@@ -157,7 +158,7 @@ export default async function ProgramsPage() {
             {elementary.map((p: typeof defaultElementary[0], i: number) => (
               <div key={i} className="prog-card">
                 <div className="prog-card__badge">
-                  <div className="prog-card__flame">{p.name}</div>
+                  <h3 className="prog-card__flame">{p.name}</h3>
                   <div className="prog-card__level">{p.level}</div>
                   <div className="prog-card__ages">{p.ages}</div>
                 </div>
@@ -205,16 +206,16 @@ export default async function ProgramsPage() {
             <h2 style={{ marginBottom: '12px' }}>{academicHeading}</h2>
             <p>{academicIntro}</p>
           </div>
-          <div className="subject-rows reveal">
+          <dl className="subject-rows reveal">
             {subjects.map((s: { name: string; description: string }, i: number) => (
               <div key={i} className="subject-row">
-                <div className="subject-row__label">
-                  <div className="subject-row__name">{s.name}</div>
-                </div>
-                <div className="subject-row__body">{s.description}</div>
+                <dt className="subject-row__label">
+                  <span className="subject-row__name">{s.name}</span>
+                </dt>
+                <dd className="subject-row__body">{s.description}</dd>
               </div>
             ))}
-          </div>
+          </dl>
         </div>
       </section>
     </>

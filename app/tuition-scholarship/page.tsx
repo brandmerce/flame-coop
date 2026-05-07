@@ -103,14 +103,14 @@ export default async function TuitionPage() {
             <table className="tuition-table">
               <thead>
                 <tr>
-                  <th style={{ textAlign: 'left' }}>Program</th>
-                  <th>App Fee<br />1st child</th>
-                  <th>App Fee<br />add&apos;l</th>
-                  <th>Supply<br />Fee</th>
-                  <th>Reg.<br />Fee</th>
-                  <th>BG<br />/parent</th>
-                  <th>Tuition<br />Total</th>
-                  <th>Tuition +<br />Reg. Total</th>
+                  <th scope="col" style={{ textAlign: 'left' }}>Program</th>
+                  <th scope="col">App Fee<br />1st child</th>
+                  <th scope="col">App Fee<br />add&apos;l</th>
+                  <th scope="col">Supply<br />Fee</th>
+                  <th scope="col">Reg.<br />Fee</th>
+                  <th scope="col">BG<br />/parent</th>
+                  <th scope="col">Tuition<br />Total</th>
+                  <th scope="col">Tuition +<br />Reg. Total</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,7 +184,7 @@ export default async function TuitionPage() {
           <p style={{ color: 'rgba(255,255,255,.65)', marginBottom: '8px' }}>
             {ctaBody1}
           </p>
-          <p style={{ color: 'rgba(255,255,255,.5)', marginBottom: '36px' }}>
+          <p style={{ color: 'rgba(255,255,255,.65)', marginBottom: '36px' }}>
             {ctaBody2}
           </p>
           <div className="btn-group" style={{ justifyContent: 'center' }}>

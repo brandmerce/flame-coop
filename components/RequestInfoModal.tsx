@@ -13,6 +13,7 @@ export default function RequestInfoModal() {
   const [renderFullscreen, setRenderFullscreen] = useState(false);
   const wasOpenRef    = useRef(false);
   const savedScrollY  = useRef(0);
+  const closeRef      = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handler = () => {
@@ -31,6 +32,13 @@ export default function RequestInfoModal() {
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, []);
+
+  // Move focus into modal when opened (WCAG 2.4.3)
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => closeRef.current?.focus());
+    }
+  }, [open]);
 
   // After modal is closed, wait for fade-out to finish before collapsing the
   // overlay back to its tiny absolute-positioned state. Otherwise the modal
@@ -179,9 +187,10 @@ export default function RequestInfoModal() {
               Request Information
             </p>
             <button
+              ref={closeRef}
               onClick={() => setOpen(false)}
-              aria-label="Close"
-              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1, color: 'var(--obsidian)', padding: '4px 8px' }}
+              aria-label="Close dialog"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.5rem', lineHeight: 1, color: 'var(--obsidian)', padding: '12px', minWidth: '44px', minHeight: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
               ×
             </button>

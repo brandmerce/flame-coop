@@ -51,6 +51,7 @@ export default function Hero({
         )}
         {!imageSrc && (
           <div
+            aria-hidden="true"
             style={{
               position:        'absolute',
               inset:           0,
@@ -119,7 +120,7 @@ export default function Hero({
             <p
               style={{
                 fontSize:      '.78rem',
-                color:         'rgba(255,255,255,.45)',
+                color:         'rgba(255,255,255,.65)',
                 letterSpacing: '.06em',
                 textTransform: 'uppercase',
                 fontWeight:    400,

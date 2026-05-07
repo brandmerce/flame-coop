@@ -41,17 +41,18 @@ const defaultChecklist = [
   'Parents lead the home. We enrich the journey.',
 ];
 
-// SVG icons for Why Choose Us cards — fixed (not editable)
+// SVG icons for Why Choose Us cards — fixed (not editable), decorative
 const whyIcons = [
-  <svg key="0" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="18" r="17" stroke="#A69264" strokeWidth="1.5"/><path d="M12 18C12 14.7 14.7 12 18 12C21.3 12 24 14.7 24 18" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/><path d="M18 24V18" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/></svg>,
-  <svg key="1" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="#A69264" strokeWidth="1.5"/><path d="M3 14H33" stroke="#A69264" strokeWidth="1.5"/><path d="M12 8V6" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/><path d="M24 8V6" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/></svg>,
-  <svg key="2" viewBox="0 0 36 36" fill="none"><path d="M18 6C14 6 10 9 10 14C10 19 18 30 18 30C18 30 26 19 26 14C26 9 22 6 18 6Z" stroke="#A69264" strokeWidth="1.5"/><circle cx="18" cy="14" r="3" stroke="#A69264" strokeWidth="1.5"/></svg>,
+  <svg key="0" viewBox="0 0 36 36" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="17" stroke="#A69264" strokeWidth="1.5"/><path d="M12 18C12 14.7 14.7 12 18 12C21.3 12 24 14.7 24 18" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/><path d="M18 24V18" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+  <svg key="1" viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="3" y="8" width="30" height="22" rx="2" stroke="#A69264" strokeWidth="1.5"/><path d="M3 14H33" stroke="#A69264" strokeWidth="1.5"/><path d="M12 8V6" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/><path d="M24 8V6" stroke="#A69264" strokeWidth="1.5" strokeLinecap="round"/></svg>,
+  <svg key="2" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 6C14 6 10 9 10 14C10 19 18 30 18 30C18 30 26 19 26 14C26 9 22 6 18 6Z" stroke="#A69264" strokeWidth="1.5"/><circle cx="18" cy="14" r="3" stroke="#A69264" strokeWidth="1.5"/></svg>,
 ];
 
 function renderBadge(label: string) {
-  if (label === 'DI')   return <><span>D</span><span style={{ fontSize: '.65em' }}>I</span></>;
-  if (label === 'DII')  return <><span>D</span><span style={{ fontSize: '.65em' }}>II</span></>;
-  if (label === 'DIII') return <><span>D</span><span style={{ fontSize: '.65em' }}>III</span></>;
+  const ariaMap: Record<string, string> = { DI: 'Discipleship 1', DII: 'Discipleship 2', DIII: 'Discipleship 3' };
+  if (label === 'DI')   return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.65em' }}>I</span></span>;
+  if (label === 'DII')  return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.65em' }}>II</span></span>;
+  if (label === 'DIII') return <span aria-label={ariaMap[label]}><span aria-hidden="true">D</span><span aria-hidden="true" style={{ fontSize: '.65em' }}>III</span></span>;
   return label;
 }
 
@@ -213,11 +214,11 @@ export default async function HomePage() {
               <h2 style={{ marginBottom: '16px' }}>{feelsHeading}</h2>
               <p className="lead" style={{ marginBottom: '20px' }}>{feelsLead}</p>
               <p style={{ marginBottom: '24px' }}>{feelsBody}</p>
-              <div className="proof-rows">
+              <ul className="proof-rows" role="list">
                 {feelsProofRows.map((row: string, i: number) => (
-                  <div key={i} className="proof-row">{row}</div>
+                  <li key={i} className="proof-row">{row}</li>
                 ))}
-              </div>
+              </ul>
             </div>
             <div className="split__media reveal reveal-delay-2">
               {feelsImageSrc ? (

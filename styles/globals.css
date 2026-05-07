@@ -50,7 +50,8 @@
   --text-mid:          #4A4A4A;   /* 9.7:1 on white  — was #666666 */
   --text-light:        #6B6B6B;   /* 5.9:1 on white  — was #999999 */
   --text-meta:         #555555;   /* 7.5:1 on white  — labels & captions */
-  --text-alt:          #B8B0A4;
+  --text-alt:          #7A7265;   /* 4.5:1 on white — was #B8B0A4 (2.6:1) */
+  --gold-text:         #85733D;   /* 4.5:1 on white — use for gold text on light bgs */
   --heading-color:     #111111;   /* 19:1 on white   — was #1A1A1A */
   --heading-alt:       #F5F2ED;
   --text-on-brand:     #FFFFFF;
@@ -131,6 +132,42 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 p { color: var(--text-mid); line-height: 1.88; margin-bottom: 1.4rem; }
 p:last-child { margin-bottom: 0; }
 
+/* ── Accessibility: visible focus indicators (WCAG 2.4.7) ────── */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline:        2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* ── Accessibility: skip-to-content link (WCAG 2.4.1) ────────── */
+.skip-link {
+  position: absolute;
+  left:     -10000px;
+  top:      auto;
+  width:    1px;
+  height:   1px;
+  overflow: hidden;
+  z-index:  10000;
+}
+.skip-link:focus {
+  position:      fixed;
+  top:           8px;
+  left:          8px;
+  width:         auto;
+  height:        auto;
+  padding:       12px 24px;
+  background:    var(--gold);
+  color:         #fff;
+  font-size:     1rem;
+  font-weight:   600;
+  border-radius: var(--radius);
+  box-shadow:    0 2px 8px rgba(0,0,0,.3);
+}
+
 /* ─────────────────────────────────────────────────────────────
    HEADING SCALE — clamp fluid type
 ───────────────────────────────────────────────────────────── */
@@ -186,7 +223,7 @@ h6, .h6 {
   line-height:    1.4;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color:          var(--primary);
+  color:          var(--gold-text);
 }
 
 /* Headings on dark backgrounds */
@@ -287,7 +324,7 @@ h6, .h6 {
   font-weight:    600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color:          var(--primary);
+  color:          var(--gold-text);
   display:        flex;
   align-items:    center;
   gap:            10px;
@@ -1184,11 +1221,19 @@ footer {
   gap:                   48px;
   margin-bottom:         48px;
 }
+/* Footer nav spans 3 columns in the grid and replicates the grid layout */
+.footer__inner > nav {
+  display:               grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column:           span 3;
+  gap:                   48px;
+}
+.footer__inner > nav > div { display: contents; }
 
 .footer__col-title { font-size: .65rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
-.footer__link      { display: block; font-size: .85rem; color: rgba(255,255,255,.5); padding: 4px 0; transition: var(--transition); }
+.footer__link      { display: block; font-size: .85rem; color: rgba(255,255,255,.55); padding: 10px 0; transition: var(--transition); }
 .footer__link:hover { color: rgba(255,255,255,.9); }
-.footer__tagline   { font-size: .85rem; line-height: 1.75; color: rgba(255,255,255,.45); font-style: italic; font-family: var(--font-heading); }
+.footer__tagline   { font-size: .85rem; line-height: 1.75; color: rgba(255,255,255,.55); font-style: italic; font-family: var(--font-heading); }
 
 .footer__bottom {
   border-top:      1px solid rgba(255,255,255,.06);
@@ -1200,10 +1245,10 @@ footer {
   flex-wrap:       wrap;
 }
 
-.footer__copy  { font-size: .78rem; color: rgba(255,255,255,.3); }
+.footer__copy  { font-size: .78rem; color: rgba(255,255,255,.55); }
 .footer__legal { display: flex; gap: 20px; }
-.footer__legal a { font-size: .78rem; color: rgba(255,255,255,.3); transition: var(--transition); }
-.footer__legal a:hover { color: rgba(255,255,255,.6); }
+.footer__legal a { font-size: .78rem; color: rgba(255,255,255,.55); transition: var(--transition); padding: 4px 0; }
+.footer__legal a:hover { color: rgba(255,255,255,.9); }
 
 @media (max-width: 900px)  { .footer__inner { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 640px)  { .footer__inner { grid-template-columns: 1fr; } }
@@ -1212,7 +1257,7 @@ footer {
    PROOF ROWS
 ───────────────────────────────────────────────────────────── */
 
-.proof-rows { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+.proof-rows { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; list-style: none; }
 
 /* ─────────────────────────────────────────────────────────────
    SECTION SPACING
@@ -1242,3 +1287,139 @@ section { padding: var(--section-v) 0; }
 .reveal-delay-1 { transition-delay: .1s; }
 .reveal-delay-2 { transition-delay: .2s; }
 .reveal-delay-3 { transition-delay: .3s; }
+
+/* ─────────────────────────────────────────────────────────────
+   ACCESSIBILITY — High-Contrast Mode (.a11y-mode on <html>)
+   Toggled by the AccessibilityWidget component.
+   WCAG 1.4.3 / 1.4.6 — Enhanced contrast (7:1)
+   WCAG 1.4.4          — Resize text (120% base)
+   WCAG 1.4.12         — Text spacing (increased)
+───────────────────────────────────────────────────────────── */
+
+html.a11y-mode {
+  font-size: 21.6px;                       /* 120% of 18px base — WCAG 1.4.4 */
+}
+
+html.a11y-mode body {
+  line-height: 2.0;                        /* Increased from 1.88 */
+  letter-spacing: 0.04em;                  /* WCAG 1.4.12 text spacing */
+  word-spacing: 0.08em;
+}
+
+/* Override all text tokens to 7:1+ contrast on white */
+html.a11y-mode {
+  --text:          #111111;                /* 19:1 on white */
+  --text-mid:      #333333;                /* 12.6:1 on white */
+  --text-light:    #444444;                /* 9.7:1 on white */
+  --text-meta:     #333333;                /* 12.6:1 on white */
+  --text-alt:      #444444;                /* 9.7:1 on white */
+  --gold-text:     #6B5D2F;                /* 7.1:1 on white */
+  --heading-color: #000000;                /* 21:1 on white */
+  --black:         #000000;
+  --dark:          #111111;
+  --mid:           #333333;
+  --light:         #444444;
+
+  /* Gold brand colour — darkened for contrast */
+  --gold:          #7A6A36;                /* 5.9:1 on white — large text OK */
+  --gold-hover:    #5C4E28;
+  --primary:       #7A6A36;
+  --primary-hover: #5C4E28;
+
+  /* Borders — sharper */
+  --border:        #999999;
+  --border-gold:   #7A6A36;
+  --border-dark:   rgba(0,0,0,.3);
+}
+
+/* Links get underline in a11y mode for WCAG 1.4.1 (not colour alone) */
+html.a11y-mode a:not(.btn):not(.skip-link):not([aria-label]) {
+  text-decoration: underline;
+}
+
+/* Paragraphs inherit tighter colour */
+html.a11y-mode p {
+  color: var(--text-mid);
+  line-height: 2.0;
+}
+
+/* Headings — solid black */
+html.a11y-mode h1,
+html.a11y-mode h2,
+html.a11y-mode h3,
+html.a11y-mode h4,
+html.a11y-mode h5,
+html.a11y-mode h6 {
+  color: var(--heading-color);
+}
+
+/* Buttons — stronger contrast */
+html.a11y-mode .btn--primary {
+  background: #333333;
+  color: #FFFFFF;
+  border: 2px solid #333333;
+}
+html.a11y-mode .btn--primary:hover {
+  background: #111111;
+  border-color: #111111;
+}
+html.a11y-mode .btn--outline {
+  border: 2px solid #333333;
+  color: #333333;
+}
+html.a11y-mode .btn--outline:hover {
+  background: #333333;
+  color: #FFFFFF;
+}
+
+/* Eyebrow labels — darkened gold */
+html.a11y-mode .eyebrow,
+html.a11y-mode h6 {
+  color: var(--gold-text);
+}
+
+/* Footer — boost all semi-transparent text to full opacity */
+html.a11y-mode #site-footer {
+  background: #000000;
+}
+html.a11y-mode .footer__tagline,
+html.a11y-mode .footer__link,
+html.a11y-mode .footer__copy,
+html.a11y-mode .footer__legal a,
+html.a11y-mode #site-footer p {
+  color: rgba(255,255,255,.9) !important;
+}
+html.a11y-mode .footer__col-title {
+  color: #FFFFFF;
+}
+
+/* Scripture banner — max contrast */
+html.a11y-mode .scripture p {
+  color: #FFFFFF;
+}
+
+/* Focus indicators — thicker in a11y mode */
+html.a11y-mode a:focus-visible,
+html.a11y-mode button:focus-visible,
+html.a11y-mode input:focus-visible,
+html.a11y-mode select:focus-visible,
+html.a11y-mode textarea:focus-visible,
+html.a11y-mode [tabindex]:focus-visible {
+  outline-width: 3px;
+  outline-color: #1565C0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ACCESSIBILITY — prefers-reduced-motion (WCAG 2.3.3)
+───────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; }
+  *, *::before, *::after {
+    transition-duration:  0.01ms !important;
+    animation-duration:   0.01ms !important;
+    transition-delay:     0s     !important;
+    animation-delay:      0s     !important;
+  }
+}

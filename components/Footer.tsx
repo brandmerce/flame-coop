@@ -12,8 +12,19 @@ export default async function Footer() {
   const youtubeUrl   = settings?.youtubeUrl   ?? null;
   const year         = new Date().getFullYear();
 
+  const socialStyle: React.CSSProperties = {
+    color: 'rgba(255,255,255,.55)',
+    fontSize: '.8rem',
+    padding: '8px 4px',
+    minWidth: '44px',
+    minHeight: '44px',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
   return (
-    <footer id="site-footer">
+    <footer id="site-footer" role="contentinfo">
       <div className="container">
         <div className="footer__inner">
           {/* Brand column */}
@@ -28,55 +39,60 @@ export default async function Footer() {
               />
             </div>
             <p className="footer__tagline">{tagline}</p>
-            <p style={{ fontSize: '.72rem', color: 'rgba(255,255,255,.2)', marginTop: '16px' }}>
+            <p style={{ fontSize: '.72rem', color: 'rgba(255,255,255,.55)', marginTop: '16px' }}>
               {address}
             </p>
             {(instagramUrl || facebookUrl || youtubeUrl) && (
-              <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+              <div style={{ display: 'flex', gap: '4px', marginTop: '16px' }}>
                 {instagramUrl && (
-                  <a href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram"
-                    style={{ color: 'rgba(255,255,255,.4)', fontSize: '.8rem' }}>IG</a>
+                  <a href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram"
+                    style={socialStyle}>IG</a>
                 )}
                 {facebookUrl && (
-                  <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Facebook"
-                    style={{ color: 'rgba(255,255,255,.4)', fontSize: '.8rem' }}>FB</a>
+                  <a href={facebookUrl} target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook"
+                    style={socialStyle}>FB</a>
                 )}
                 {youtubeUrl && (
-                  <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube"
-                    style={{ color: 'rgba(255,255,255,.4)', fontSize: '.8rem' }}>YT</a>
+                  <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="Watch us on YouTube"
+                    style={socialStyle}>YT</a>
                 )}
               </div>
             )}
           </div>
 
-          {/* About Us */}
-          <div>
-            <div className="footer__col-title">About Us</div>
-            <Link href="/about"    className="footer__link">About Us</Link>
-            <Link href="/beliefs"  className="footer__link">Our Beliefs</Link>
-            <Link href="/admissions#admissions-form" className="footer__link">Contact Us</Link>
-          </div>
+          {/* Footer navigation — wrapped in nav for WCAG 2.4.1 */}
+          <nav aria-label="Footer navigation">
+            <div style={{ display: 'contents' }}>
+              {/* About Us */}
+              <div>
+                <h2 className="footer__col-title">About Us</h2>
+                <Link href="/about"    className="footer__link">About Us</Link>
+                <Link href="/beliefs"  className="footer__link">Our Beliefs</Link>
+                <Link href="/admissions#admissions-form" className="footer__link">Contact Us</Link>
+              </div>
 
-          {/* Our School */}
-          <div>
-            <div className="footer__col-title">Our School</div>
-            <Link href="/programs"            className="footer__link">Our Programs</Link>
-            <Link href="/admissions"          className="footer__link">Admission</Link>
-            <Link href="/tuition-scholarship" className="footer__link">Tuition &amp; Scholarship</Link>
-          </div>
+              {/* Our School */}
+              <div>
+                <h2 className="footer__col-title">Our School</h2>
+                <Link href="/programs"            className="footer__link">Our Programs</Link>
+                <Link href="/admissions"          className="footer__link">Admission</Link>
+                <Link href="/tuition-scholarship" className="footer__link">Tuition &amp; Scholarship</Link>
+              </div>
 
-          {/* Resources */}
-          <div>
-            <div className="footer__col-title">Resources</div>
-            <Link href="#"                              className="footer__link">Calendar</Link>
-            <Link href="#"                              className="footer__link">Handbook</Link>
-            <Link href="/admissions#admissions-form"    className="footer__link">Request Info</Link>
-          </div>
+              {/* Resources */}
+              <div>
+                <h2 className="footer__col-title">Resources</h2>
+                <span className="footer__link" aria-disabled="true" style={{ opacity: 0.5 }}>Calendar (coming soon)</span>
+                <span className="footer__link" aria-disabled="true" style={{ opacity: 0.5 }}>Handbook (coming soon)</span>
+                <Link href="/admissions#admissions-form" className="footer__link">Request Info</Link>
+              </div>
+            </div>
+          </nav>
         </div>
 
         <div className="footer__bottom">
           <p className="footer__copy">
-            © {year} The Flame Christian Cooperative. All rights reserved.
+            &copy; {year} The Flame Christian Cooperative. All rights reserved.
             {' · '}
             <a href="https://eduweby.com" target="_blank" rel="noopener noreferrer"
               style={{ textDecoration: 'none', color: 'inherit' }}>
