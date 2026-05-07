@@ -1393,6 +1393,40 @@ html.a11y-mode .footer__col-title {
   color: #FFFFFF;
 }
 
+/* Dark sections — keep text white on dark backgrounds */
+html.a11y-mode .section--dark h1,
+html.a11y-mode .section--dark h2,
+html.a11y-mode .section--dark h3,
+html.a11y-mode .section--dark h4,
+html.a11y-mode .section--dark h5,
+html.a11y-mode .section--dark h6 {
+  color: #FFFFFF;
+}
+html.a11y-mode .section--dark p,
+html.a11y-mode .section--dark .lead,
+html.a11y-mode .section--dark .card3__body,
+html.a11y-mode .section--dark li {
+  color: rgba(255,255,255,.9);
+}
+html.a11y-mode .section--dark .eyebrow {
+  color: var(--gold-light) !important;
+}
+html.a11y-mode .section--dark .card3__title {
+  color: #FFFFFF;
+}
+html.a11y-mode .section--dark a:not(.btn) {
+  color: rgba(255,255,255,.9);
+}
+
+/* Hero — keep text white */
+html.a11y-mode .hero h1,
+html.a11y-mode .hero h2 {
+  color: #FFFFFF;
+}
+html.a11y-mode .hero p {
+  color: rgba(255,255,255,.9);
+}
+
 /* Scripture banner — max contrast */
 html.a11y-mode .scripture p {
   color: #FFFFFF;
