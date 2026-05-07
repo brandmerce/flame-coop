@@ -88,11 +88,13 @@ export default async function BeliefsPage() {
       {/* STATEMENT OF FAITH */}
       <section style={{ padding: 'var(--section-v) 0' }}>
         <div className="container">
+          <div className="reveal" style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 48px' }}>
+            <span className="eyebrow" style={{ display: 'block', textAlign: 'center', justifyContent: 'center' }}>Statement of Faith</span>
+            <h2 style={{ marginBottom: '20px' }}>{statementTitle}</h2>
+            <p className="lead">{statementIntro}</p>
+          </div>
           <div className="split reveal">
             <div className="split__body">
-              <span className="eyebrow">Statement of Faith</span>
-              <h2 style={{ marginBottom: '20px' }}>{statementTitle}</h2>
-              <p style={{ marginBottom: '28px' }}>{statementIntro}</p>
               <ul className="belief-list">
                 {beliefsList.map((b: string, i: number) => (
                   <li key={i}>{b}</li>
